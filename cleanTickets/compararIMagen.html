@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+    <script src="image-diff.min.js"></script>
+</head>
+
+<body>
+
+    <div id="result-container">
+        <img src="" id="imageA" />
+        <img src="" id="imageB" />
+    </div>
+
+
+
+    <script>
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        var a = getParameterByName('a'); // "" (present with no value)
+        var b = getParameterByName('b'); // "" (present with no value)
+
+        document.getElementById("imageA").setAttribute("src", "./images/" + a);
+        document.getElementById("imageB").setAttribute("src", "./images/" + b);
+
+
+
+
+        
+        // Una variable bandera que indica cuando las 2 imágenes hayan sido cargadas
+        var loadedImages = 0;
+
+        // Crea una variable a partir de la primera imágen
+        var ImageA = document.getElementById("imageA");
+
+        // Crea una variable a partir de la segunda imágen
+        var ImageB = document.getElementById("imageB");
+
+        /**
+         * Callback ejecutado cuando las imágenes hayan sido finalmente cargadas
+         *  
+         **/
+        var onImagesLoaded = function() {
+            // Incrementar la variable bandera
+            loadedImages++;
+
+            // Saltar ejecución del callback si las 2 imágenes no han sido cargadas
+            // de otra manera continue con la diferenciación
+            if (loadedImages != 2) {
+                return;
+            }
+
+            // Crea la imágen que muestra las diferencias entre las 2 imágenes
+            var diff = imagediff.diff(ImageA, ImageB);
+            // Crea un canvas con el método imagediff (con las dimensiones de la imágen generada)
+            var canvas = imagediff.createCanvas(diff.width, diff.height);
+            // Obtener contexto en 2d
+            var context = canvas.getContext('2d');
+            // Dibujar la imágen generada con las diferencias en el canvas
+            context.putImageData(diff, 0, 0);
+            // Agrega el elemento canvas al div para mostrar
+            document.getElementById("result-container").appendChild(canvas);
+
+            // Mostrar una alerta !
+            alert("No coinciden");
+        };
+
+        // Ejecuta el callback declarado una ves carguen las imágenes
+        ImageA.addEventListener("load", onImagesLoaded, false);
+        ImageB.addEventListener("load", onImagesLoaded, false);
+
+    </script>
+
+
+
+
+
+
+
+</body>
+
+</html>
+
+
+    </script>
+
+
+
+
+
+
+
+</body>
+
+</html>
